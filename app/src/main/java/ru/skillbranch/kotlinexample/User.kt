@@ -38,7 +38,7 @@ class User private constructor(
 
     var login:String
         set(value) {
-            _login = value?.toLowerCase()
+            _login = value.toLowerCase()
         }
         get() = _login!!
 
@@ -70,10 +70,13 @@ class User private constructor(
         passwordHasg = encrypt(code)
         accessCode = code
 
-        var rawPhone = rawPhone.replace("[^+\\d]".toRegex(), "")
-        check(rawPhone.matches("^(?:[+0])?[0-9]{11}".toRegex())) {IllegalArgumentException("Enter a valid phone number starting with a + and containing 11 digits")}
-        sendAccessCodeToUser(rawPhone, code)
+        check(rawPhone.toValidNumber().matches("^(?:[+0])?[0-9]{11}".toRegex())) {
+            throw IllegalArgumentException("Enter a valid phone number starting with a + and containing 11 digits")
+        }
+        sendAccessCodeToUser(rawPhone.toValidNumber(), code)
     }
+
+    private fun String.toValidNumber(): String = this.replace("[^+\\d]".toRegex(), "")
 
     //fov csv
     constructor(
