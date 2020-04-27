@@ -49,8 +49,14 @@ object UserHolder {
         val iter = csv.iterator()
 
         return mutableListOf<String>().apply {
-            while (iter.hasNext())
-                this.add(User.importUser(iter.next()).userInfo)
+            while (iter.hasNext()) {
+                add(User.importUser(iter.next()).also { user -> if (!map.containsKey(user.login))map[user.login] = user
+                else throw IllegalArgumentException("A user with this email already exists")
+
+                }.userInfo)
+            }
+
+
         }
     }
 

@@ -182,19 +182,29 @@ class User private constructor(
                     else -> get(1)
                 }
 
-                return User(
-                    firstName = firstName,
-                    lastName = lastName,
-                    email = email,
-                    phone = phone,
-                    salt = salt,
-                    passwordHasg = password
-                )
+                return when {
+                    !phone.isNullOrBlank() -> User(
+                        firstName = firstName,
+                        lastName = lastName,
+                        email = null,
+                        phone = phone,
+                        salt = salt,
+                        passwordHasg = password
+                    )
+                    !email.isNullOrBlank() -> User(
+                        firstName = firstName,
+                        lastName = lastName,
+                        email = email,
+                        phone = null,
+                        salt = salt,
+                        passwordHasg = password
+                    )
+                    else -> throw IllegalArgumentException("Email or phone must be not null or blank")
+
+                }
                 }
 
             }
-
-
 
 
         fun makeUser(
@@ -231,8 +241,8 @@ class User private constructor(
                 .filter { it.isNotBlank()}
                 .run {
                     when(size) {
-                        1 -> first() to null
-                        2 -> first() to last()
+                        1 -> first().trim() to null
+                        2 -> first().trim() to last().trim()
                         else -> throw IllegalArgumentException("firstName is empty")
                     }
                 }
