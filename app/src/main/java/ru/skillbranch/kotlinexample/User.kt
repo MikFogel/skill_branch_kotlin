@@ -227,7 +227,7 @@ class User private constructor(
 
 
         private fun String.fullNameToPair(): Pair<String, String?> {
-            return this.split(" ")
+            return this.trim().split(" ")
                 .filter { it.isNotBlank()}
                 .run {
                     when(size) {

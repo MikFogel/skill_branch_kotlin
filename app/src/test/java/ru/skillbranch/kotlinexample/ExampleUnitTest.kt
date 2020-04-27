@@ -105,6 +105,7 @@ class ExampleUnitTest {
     fun login_user_success() {
         val holder = UserHolder
         holder.registerUser("John Doe", "John_Doe@unknown.com","testPass")
+
         val expectedInfo = """
             firstName: John
             lastName: Doe
@@ -165,6 +166,7 @@ class ExampleUnitTest {
     fun request_access_code() {
         val holder = UserHolder
         val user = holder.registerUserByPhone("John Doe", "+7 (917) 971-11-11")
+            .also { print (it.userInfo) }
         val oldAccess = user.accessCode
         holder.requestAccessCode("+7 (917) 971-11-11")
 
@@ -183,26 +185,5 @@ class ExampleUnitTest {
 
         Assert.assertNotEquals(oldAccess, user.accessCode!!)
         Assert.assertEquals(expectedInfo, successResult)
-    }
-
-    @Test
-    fun importUsers() {
-        val holder = UserHolder
-        val csv = " John Doe ;JohnDoe@unknow.com;[B@7591083d:c6adb4becdc64e92857e1e2a0fd6af84;;"
-        val successResult = holder.importUsers(listOf(csv))
-
-        val expectedInfo = """
-            firstName: John
-            lastName: Doe
-            login: johndoe@unknow.com
-            fullName: John Doe
-            initials: J D
-            email: JohnDoe@unknow.com
-            phone: null
-            meta: {src=csv}
-        """.trimIndent()
-
-
-        Assert.assertEquals(expectedInfo, successResult.first())
     }
 }

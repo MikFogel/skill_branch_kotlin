@@ -32,7 +32,6 @@ object UserHolder {
     }
 
 
-
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)
     fun clearHolder(){
         map.clear()
@@ -60,5 +59,6 @@ object UserHolder {
         if (this.matches("^([a-zA-Z0-9_/-/.]+)@([a-zA-Z0-9_/-/.]+).([a-zA-Z]{2,5})$".toRegex())) return this
         else return this.replace("[^+\\d]".toRegex(), "").trim()
     }
+
 
 }
